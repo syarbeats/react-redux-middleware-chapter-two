@@ -46,6 +46,7 @@ const reducer = (state=initialState, action) => {
 const middleware = applyMiddleware(thunk, logger);
 export const store =  createStore(reducer, middleware);
 
+
 store.dispatch((dispatch) => {
   dispatch({type: "FETCH_USERS_START"});
   axios.get("https://jsonplaceholder.typicode.com/posts")
@@ -56,6 +57,33 @@ store.dispatch((dispatch) => {
         dispatch({type: "FETCH_USERS_ERROR", payload: err})
       })
 });
+
+
+/*store.dispatch((dispatch) => {
+  dispatch({type: "FETCH_USERS_START"});
+  axios.get("http://localhost:8080/api/allEmployees", {
+    headers: {
+      'Access-Control-Allow-Origin': 'http://localhost:3000',
+      'Access-Control-Allow-Methods' : '*',
+      'Access-Control-Allow-Headers' : '*',
+      'Access-Control-Allow-Credentials' : '*',
+      'Access-Control-Max-Age' : '3600',
+      'X-Requested-With': 'XMLHttpRequest'
+    },
+    withCredentials: true,
+    crossOrigin:true,
+    auth: {
+      username: 'admin',
+      password: 'admin123'
+    }
+  })
+      .then((response) => {
+        dispatch({type: "RECEIVE_USERS", payload: response.data})
+      })
+      .catch((err) => {
+        dispatch({type: "FETCH_USERS_ERROR", payload: err})
+      })
+});*/
 
 const mapStateToProps = state => {
   console.log('mapStateToProps', state.users);
@@ -79,7 +107,7 @@ class App extends Component {
                   <table className="table table-striped">
                     <tbody>
                     {this.props.posts.map((posts, i) => <TableRow key = {i} data = {posts} />)}
-                    </tbody>e
+                    </tbody>
                   </table>
                 </div>
               </div>
