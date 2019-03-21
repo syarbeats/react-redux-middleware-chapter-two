@@ -4,6 +4,7 @@ import { applyMiddleware, createStore } from 'redux';
 import axios from 'axios';
 import logger from 'redux-logger';
 import thunk from 'redux-thunk'
+import {connect} from "react-redux";
 
 const initialState = {
   fetching: false,
@@ -36,14 +37,14 @@ const reducer = (state=initialState, action) => {
         fetched: true,
         users: action.payload
       }
-      break
+      break;
     }
   }
   return state;
 }
 
 const middleware = applyMiddleware(thunk, logger);
-const store =  createStore(reducer, middleware);
+export const store =  createStore(reducer, middleware);
 
 store.dispatch((dispatch) => {
   dispatch({type: "FETCH_USERS_START"});
@@ -56,15 +57,48 @@ store.dispatch((dispatch) => {
       })
 });
 
+const mapStateToProps = state => {
+  console.log('mapStateToProps', state.users);
+  return {
+    posts: state.users
+  };
+};
+
+
 class App extends Component {
   render() {
     return (
-      <div className="App">
-        <h1>Learning React-Redux Middleware</h1>
-        <p>Check inspect element to see the state..</p>
-      </div>
+
+          <div className="App">
+            <h1>Learning React-Redux Middleware</h1>
+            <p>Check inspect element to see the state..</p>
+            <div>
+              <div className="card">
+                <div className="card-header">POSTS LIST</div>
+                <div className="card-body">
+                  <table className="table table-striped">
+                    <tbody>
+                    {this.props.posts.map((posts, i) => <TableRow key = {i} data = {posts} />)}
+                    </tbody>e
+                  </table>
+                </div>
+              </div>
+            </div>
+          </div>
+
     );
   }
 }
 
-export default App;
+class TableRow extends React.Component{
+  render() {
+    return (
+        <tr>
+          <td>{this.props.data.id}</td>
+          <td>{this.props.data.title}</td>
+          <td>{this.props.data.body}</td>
+        </tr>
+    );
+  }
+}
+export default connect(mapStateToProps)(App);
