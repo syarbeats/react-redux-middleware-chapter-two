@@ -5,6 +5,8 @@ import axios from 'axios';
 import logger from 'redux-logger';
 import thunk from 'redux-thunk'
 import {connect} from "react-redux";
+import MyComponent from "./MyComponent";
+import TableRow from './TableRow';
 
 const initialState = {
   fetching: false,
@@ -111,6 +113,7 @@ class App extends Component {
                   </table>
                 </div>
               </div>
+              <MyComponent/>
             </div>
           </div>
 
@@ -118,15 +121,5 @@ class App extends Component {
   }
 }
 
-class TableRow extends React.Component{
-  render() {
-    return (
-        <tr>
-          <td>{this.props.data.id}</td>
-          <td>{this.props.data.title}</td>
-          <td>{this.props.data.body}</td>
-        </tr>
-    );
-  }
-}
+
 export default connect(mapStateToProps)(App);
